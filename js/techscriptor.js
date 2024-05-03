@@ -44,46 +44,88 @@ function countSentences(str) {
 function updateView() {
     htmlOutput = md.render(editor.getValue());
     var replacements = [];
-    const rules = {
+    const rulesPtBr = {
         "hardToRead": {
             "regex": /((\w+,\s+)|(\w+\s+)){20,}(\w+[\.|?|!])/g,
-            "message": "This sentence is hard to read.",
+            "message": "Esta frase é difícil de ler.",
             "color": "#f0f0a0",
-            "summary": " sentences are hard to read.",
-            "summarySingle": " sentence is hard to read."
+            "summary": " frases são difíceis de ler.",
+            "summarySingle": " frase é difícil de ler."
         },
         "adverbs": {
-            "regex": /((\w+)ly)|sometimes|perhaps|maybe/g,
-            "message": "<em>Adverb:</em> Use a forceful verb.",
+            "regex": /((\w+)mente)|às vezes|talvez|possivelmente/g,
+            "message": "<em>Advérbio:</em> Use um verbo mais forte.",
             "color": "#a0e0ff",
-            "summary": " adverbs.",
-            "summarySingle": " adverb."
+            "summary": " advérbios.",
+            "summarySingle": " advérbio."
         },
         "passiveVoice": {
-            "regex": /\b((be(en)?)|(w(as|ere))|(is)|(a(er|m)))(\.|\,)?\s(\w+\s)?(\w+(en|ed))(\s|\.|\,)/g,
-            "message": "<em>Passive voice:</em> Use active voice.",
+            "regex": /\b((é|foi)|(são|eram)|(está|estava)|(seria|será)|(ser|estar))(\.|\,)?\s(\w+\s)?(\w+(ido|ado))(\s|\.|\,)/g,
+            "message": "<em>Voz passiva:</em> Use a voz ativa.",
             "color": "#a0f0a0",
-            "summary": " uses of passive voice.",
-            "summarySingle": " use of passive voice."
+            "summary": " utilizações da voz passiva.",
+            "summarySingle": " utilização da voz passiva."
         },
         "thereIsThereAre": {
-            "regex": /\bThere (is|are)\b/g,
-            "message": "<em>Generic:</em> Be precise.",
+            "regex": /\bTem (um|uma|alguns|algumas)\b/g,
+            "message": "<em>Genérico:</em> Seja preciso.",
             "color": "#f0a0f0",
-            "summary": " uses of <em>There is</em>/<em>There are</em>.",
-            "summarySingle": " use of <em>There is</em>/<em>There are</em>."
+            "summary": " utilizações de <em>Tem</em>.",
+            "summarySingle": " utilização de <em>Tem</em>."
         },
         "genericVerb": {
-            "regex": /\b(happen|occur)(s?)/g,
-            "message": "<em>Generic verb:</em> Use precise verbs.",
+            "regex": /\b(acontece|muito|muita|ocorre|ocorrem)(s?)/g,
+            "message": "<em>Verbo genérico:</em> Use verbos mais precisos.",
             "color": "#f0a0f0",
-            "summary": " uses of generic verbs.",
-            "summarySingle": " use of generic verbs."
+            "summary": " utilizações de verbos genéricos.",
+            "summarySingle": " utilização de verbos genéricos."
+        },
+        "tooManyWords": {
+            "regex": /(\w+\s){50,}/g,
+            "message": "Esta frase tem muitas palavras. Considere dividir em frases menores.",
+            "color": "#f0f0a0",
+            "summary": " frases têm muitas palavras.",
+            "summarySingle": " frase tem muitas palavras."
+        },
+        "repeatedWords": {
+            "regex": /\b(\w+)\s+\1\b/g,
+            "message": "Evite repetir a mesma palavra consecutivamente.",
+            "color": "#f0f0a0",
+            "summary": " repetições de palavras.",
+            "summarySingle": " repetição de palavras."
+        },
+        "cliches": {
+            "regex": /\b(às vezes|de vez em quando|em um piscar de olhos)\b/g,
+            "message": "Evite clichês e expressões muito comuns.",
+            "color": "#f0f0a0",
+            "summary": " clichês ou expressões comuns.",
+            "summarySingle": " clichê ou expressão comum."
+        },
+        "weakVerbs": {
+            "regex": /\b(ser|estar|fazer|ter)\b/g,
+            "message": "Use verbos mais descritivos para tornar o texto mais interessante.",
+            "color": "#a0e0ff",
+            "summary": " verbos fracos.",
+            "summarySingle": " verbo fraco."
+        },
+        "tooManyAdjectives": {
+            "regex": /\b(\w+\s){2,}(\w+\s){2,}\w+\b/g,
+            "message": "Evite usar muitos adjetivos. Escolha os mais relevantes.",
+            "color": "#a0e0ff",
+            "summary": " uso excessivo de adjetivos.",
+            "summarySingle": " uso excessivo de adjetivos."
+        },
+        "complexSentenceStructure": {
+            "regex": /\b(\w+\s){15,}\w+[\.|?|!]\b/g,
+            "message": "Esta frase tem uma estrutura muito complexa. Considere dividi-la em frases menores.",
+            "color": "#f0f0a0",
+            "summary": " frases têm estrutura complexa.",
+            "summarySingle": " frase tem estrutura complexa."
         }
     }
     var ruleReplacements = {}
-    for (var label in rules) {
-        rule = rules[label];
+    for (var label in rulesPtBr) {
+        rule = rulesPtBr[label];
         ruleReplacements[label] = 0;
         htmlOutput = htmlOutput.replaceAll(rule["regex"], function (match) {
             replacements.push(getPopover(match, rule["message"], rule["color"]));
@@ -93,12 +135,12 @@ function updateView() {
     }
     console.log(ruleReplacements);
     rulesSummary = "";
-    for (var label in rules) {
-        var s = rules[label]["summary"];
+    for (var label in rulesPtBr) {
+        var s = rulesPtBr[label]["summary"];
         if (ruleReplacements[label] == 1) {
-            s = rules[label]["summarySingle"];
+            s = rulesPtBr[label]["summarySingle"];
         }
-        rulesSummary += `<div class="rounded m-1 p-1 d-inline-block" style="background: ${rules[label]["color"]};">
+        rulesSummary += `<div class="rounded m-1 p-1 d-inline-block" style="background: ${rulesPtBr[label]["color"]};">
                             <span class="badge bg-secondary"> ${ruleReplacements[label]}</span>" 
                             ${s}  
                         </div>`;
