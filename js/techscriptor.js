@@ -45,20 +45,6 @@ function updateView() {
     htmlOutput = md.render(editor.getValue());
     var replacements = [];
     const rulesPtBr = {
-        "hardToRead": {
-            "regex": /((\w+,\s+)|(\w+\s+)){20,}(\w+[\.|?|!])/g,
-            "message": "Esta frase é difícil de ler.",
-            "color": "#f0f0a0",
-            "summary": " frases são difíceis de ler.",
-            "summarySingle": " frase é difícil de ler."
-        },
-        "adverbs": {
-            "regex": /((\w+)mente)|às vezes|talvez|possivelmente/g,
-            "message": "<em>Advérbio:</em> Use um verbo mais forte.",
-            "color": "#a0e0ff",
-            "summary": " advérbios.",
-            "summarySingle": " advérbio."
-        },
         "passiveVoice": {
             "regex": /\b((é|foi)|(são|eram)|(está|estava)|(seria|será)|(ser|estar))(\.|\,)?\s(\w+\s)?(\w+(ido|ado))(\s|\.|\,)/g,
             "message": "<em>Voz passiva:</em> Use a voz ativa.",
@@ -101,28 +87,8 @@ function updateView() {
             "summary": " clichês ou expressões comuns.",
             "summarySingle": " clichê ou expressão comum."
         },
-        "weakVerbs": {
-            "regex": /\b(ser|estar|fazer|ter)\b/g,
-            "message": "Use verbos mais descritivos para tornar o texto mais interessante.",
-            "color": "#a0e0ff",
-            "summary": " verbos fracos.",
-            "summarySingle": " verbo fraco."
-        },
-        "tooManyAdjectives": {
-            "regex": /\b(\w+\s){2,}(\w+\s){2,}\w+\b/g,
-            "message": "Evite usar muitos adjetivos. Escolha os mais relevantes.",
-            "color": "#a0e0ff",
-            "summary": " uso excessivo de adjetivos.",
-            "summarySingle": " uso excessivo de adjetivos."
-        },
-        "complexSentenceStructure": {
-            "regex": /\b(\w+\s){15,}\w+[\.|?|!]\b/g,
-            "message": "Esta frase tem uma estrutura muito complexa. Considere dividi-la em frases menores.",
-            "color": "#f0f0a0",
-            "summary": " frases têm estrutura complexa.",
-            "summarySingle": " frase tem estrutura complexa."
-        }
-    }
+        // Adicione mais regras conforme necessário
+    };
     var ruleReplacements = {}
     for (var label in rulesPtBr) {
         rule = rulesPtBr[label];
